@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-deployment
+  labels:
+    app: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+      - name: db
+        image: erdialtnsk/quotes-data:v1
+        env:
+          - name: MYSQL_ALLOW_EMPTY_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: data-secret
+                key: MYSQL_ALLOW_EMPTY_PASSWORD
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: data-secret
+                key: MYSQL_PASSWORD
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: data-secret
+                key: MYSQL_ROOT_PASSWORD
+          - name: MYSQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: data-secret
+                key: MYSQL_DATABASE 
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: data-vol
+      volumes:
+      - name: data-vol
+        persistentVolumeClaim:
+          claimName: data-pvc

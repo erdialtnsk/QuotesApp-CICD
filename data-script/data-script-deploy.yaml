@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-script-deployment
+  labels:
+    app: data-script
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-script
+  template:
+    metadata:
+      labels:
+        app: data-script
+    spec:
+      containers:
+      - name: data-script
+        image: erdialtnsk/quotes-data-script:v2  
+        env:
+        - name: MYSQL_DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: data-script-secret
+              key: MYSQL_DB_HOST
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: data-script-secret
+              key: MYSQL_PASSWORD
+        - name: MYSQL_USER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: data-script-secret
+              key: MYSQL_USER_PASSWORD
+      initContainers:
+      - name: init-mydb
+        image: erdialtnsk/quotes-data-script:v1
+        #command: ['sh', '-c', "until mysql -h ${MYSQL_DB_HOST} -u ${MYSQL_USER} -p${MYSQL_USER_PASSWORD} -e 'show databases;'; do echo waiting for mydb; sleep 2; done"]
+        command:
+        - sleep
+        - "1200" 
+        env:
+        - name: MYSQL_DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: data-script-secret
+              key: MYSQL_DB_HOST
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: data-script-secret
+              key: MYSQL_USER
+        - name: MYSQL_USER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: data-script-secret
+              key: MYSQL_USER_PASSWORD
