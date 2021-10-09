@@ -9,4 +9,4 @@ stop:
 	kubectl delete -f . && cd data-script/ && kubectl delete -f .
 
 clean: stop
-	cd pvc/ && kubectl delete -f pvc.yaml
+	cd pvc/ && kubectl delete -f data-pvc.yaml

@@ -40,19 +40,6 @@ spec:
         command:
         - sleep
         - "1200" 
-        env:
-        - name: MYSQL_DB_HOST
-          valueFrom:
-            secretKeyRef:
-              name: data-script-secret
-              key: MYSQL_DB_HOST
-        - name: MYSQL_USER
-          valueFrom:
-            secretKeyRef:
-              name: data-script-secret
-              key: MYSQL_USER
-        - name: MYSQL_USER_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: data-script-secret
-              key: MYSQL_USER_PASSWORD
+        envFrom:
+        - secretRef:
+            name: data-script-secret
