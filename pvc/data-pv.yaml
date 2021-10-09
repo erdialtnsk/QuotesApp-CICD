@@ -9,3 +9,5 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   storageClassName: erdi
+  hostPath:
+      path: /temp/
