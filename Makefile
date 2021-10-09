@@ -1,4 +1,3 @@
-# nothing added, this is only for webhook trigger
 run:
 	kubectl apply -f .
 	cd pvc/ && kubectl apply -f .
