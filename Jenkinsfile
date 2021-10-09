@@ -27,17 +27,8 @@ spec:
       checkout scm
       container('jenkins-slave') {
         sh ''' 
-        export AWS_DEFAULT_REGION=us-east-1
-        cd back/
-        make run
         make fill-db
-        make stop
         make clean
-        cd ..
-        cd data/
-        make build
-        make push
-        make deploy
         '''
       }
     }
